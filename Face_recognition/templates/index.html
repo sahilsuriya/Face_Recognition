@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition System</title>
+    <script>
+        function startRecognition() {
+            const formData = new FormData(document.querySelector('form'));
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Face added successfully!');
+                    document.getElementById("video-feed").style.display = 'block'; // Make video feed visible
+                    document.getElementById("video-feed").src = "/video_feed"; // Start video feed
+                } else {
+                    alert('Failed to upload face!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred!');
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Face Recognition System</h1>
+    <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" onsubmit="event.preventDefault(); startRecognition();">
+        <input type="text" name="name" placeholder="Enter Name" required>
+        <input type="file" name="image" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+    <h2>Live Recognition</h2>
+    <!-- Initially hidden video feed, will be shown after successful upload -->
+    <img id="video-feed" src="" width="640" height="480" style="display: none;">
+</body>
+</html>
